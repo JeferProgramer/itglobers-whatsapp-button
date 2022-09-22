@@ -1,5 +1,6 @@
 import React  from "react";
 import PropTypes from "prop-types";
+import {useDevice} from "vtex.device-detector"
 import styles from "./styles.css";
 type Props = {
   logo: string
@@ -11,9 +12,28 @@ type Props = {
 const WhatsappButton = ({logo, phone, message, width, height}:Props) => {
   const formattedMessage = message.replace(/ /g, "%20")
   console.log("Mi mensaje formateado es  "+formattedMessage, logo)
+  const {isMobile} = useDevice();
   return(
   <>
-    <div className={`fixed bottom-2 right-2 flex flexColumn ${styles.containerButton}`}>
+  {
+    isMobile
+     ?
+      <div className={`fixed bottom-2 right-2 flex flexColumn ${styles.containerButton}`}>
+        <a
+          href={`https://wa.me/${phone}?text=${formattedMessage}`}
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <img
+            src={logo}
+            width={70}
+            height={70}
+            alt="Logo de WhatsApp"
+          />
+        </a>
+      </div>
+     :
+     <div className={`fixed bottom-2 right-2 flex flexColumn ${styles.containerButton}`}>
       <a
         href={`https://wa.me/${phone}?text=${formattedMessage}`}
         target="_blank"
@@ -27,6 +47,7 @@ const WhatsappButton = ({logo, phone, message, width, height}:Props) => {
         />
       </a>
     </div>
+  }
   </>
   )
 }
